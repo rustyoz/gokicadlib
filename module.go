@@ -1,29 +1,31 @@
 package gokicadlib
 
+// Module Kicad Module
 type Module struct {
-	name string
+	Name string
 
-	layer     KicadLayer
-	tedit     TimeStamp
-	tstamp    TimeStamp
-	origin    XYZ
-	descr     string
-	tags      []string
-	path      string
-	reference Text
-	value     Text
-	lines     []Line
-	pads      []Pad
-	model     Model
+	Layer     KicadLayer
+	Tedit     TimeStamp
+	Tstamp    TimeStamp
+	Origin    XYZ
+	Descr     string
+	Tags      []string
+	Path      string
+	Reference Text
+	Value     Text
+	Lines     []Line
+	Pads      []Pad
+	Model     Model
 }
 
-func (m Module) ToSexp() string {
-	module := JoinStrings("module", m.reference.Text, m.layer.String(), NewSExp("tedit", false, m.tedit.String()), NewSExp("tstamp", false, m.tstamp.String()))
-	at := m.origin.ToSexp()
-	tags := NewSExp("tags", false, m.tags...)
-	path := NewSExp("path", false, m.path)
-	reference := m.reference.ToSExp()
-	value := m.reference.ToSExp()
-	lines := LineSlice(m.lines).ToSExp()
+// ToSExp convert to kicad s-expression
+func (m Module) ToSExp() string {
+	module := JoinStrings("module", m.Reference.Text, m.Layer.String(), NewSExp("tedit", false, m.Tedit.String()), NewSExp("tstamp", false, m.Tstamp.String()))
+	at := m.Origin.ToSexp()
+	tags := NewSExp("tags", false, m.Tags...)
+	path := NewSExp("path", false, m.Path)
+	reference := m.Reference.ToSExp()
+	value := m.Value.ToSExp()
+	lines := LineSlice(m.Lines).ToSExp()
 	return NewSExp(module, true, at, tags, path, reference, value, lines)
 }
