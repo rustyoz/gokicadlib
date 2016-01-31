@@ -1,9 +1,22 @@
 package gokicadlib
 
-import "fmt"
+import (
+	"fmt"
+
+	"time"
+)
 
 type TimeStamp int64
 
 func (t TimeStamp) String() string {
-	return fmt.Sprintf("%8.8lX", t)
+	s := fmt.Sprintf("%X", int64(t))
+	fmt.Println(s)
+	return s
+}
+
+func (t *TimeStamp) Stamp() *TimeStamp {
+	var nt TimeStamp
+	nt = TimeStamp(time.Now().UnixNano())
+	t = &nt
+	return t
 }

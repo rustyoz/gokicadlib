@@ -20,12 +20,13 @@ type Module struct {
 
 // ToSExp convert to kicad s-expression
 func (m Module) ToSExp() string {
-	module := JoinStrings("module", m.Reference.Text, m.Layer.String(), NewSExp("tedit", false, m.Tedit.String()), NewSExp("tstamp", false, m.Tstamp.String()))
+	module := JoinStrings("module", m.Reference.Text, m.Layer.String(), NewSExp("tedit", false, m.Tedit.Stamp().String()), NewSExp("tstamp", false, m.Tstamp.String()))
 	at := m.Origin.ToSexp()
 	tags := NewSExp("tags", false, m.Tags...)
 	path := NewSExp("path", false, m.Path)
 	reference := m.Reference.ToSExp()
 	value := m.Value.ToSExp()
 	lines := LineSlice(m.Lines).ToSExp()
-	return NewSExp(module, true, at, tags, path, reference, value, lines)
+	pads := PadSlice(m.Pads).ToSExp()
+	return NewSExp(module, true, at, tags, path, reference, value, lines, pads)
 }
