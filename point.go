@@ -1,23 +1,20 @@
 package gokicadlib
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 type Point struct {
-	X string
-	Y string
-}
-
-func (p Point) ToPointFloat() PointFloat {
-	x, _ := strconv.ParseFloat(p.X, 64)
-	y, _ := strconv.ParseFloat(p.Y, 64)
-	return PointFloat{x, y}
-}
-
-type PointFloat struct {
 	X float64
 	Y float64
 }
 
+func (p *Point) FromString(x string, y string) {
+	p.X, _ = strconv.ParseFloat(x, 64)
+	p.Y, _ = strconv.ParseFloat(y, 64)
+}
+
 func (p Point) ToString() string {
-	return p.X + " " + p.Y
+	return fmt.Sprintf("%.4f %.4f", p.X, p.Y)
 }

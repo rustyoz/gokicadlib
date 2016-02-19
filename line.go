@@ -1,20 +1,23 @@
 package gokicadlib
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 type Line struct {
 	Origin Point
 	End    Point
 	Layer  Layer
-	Width  string
+	Width  float64
 }
 
 func (line Line) ToSExp() string {
 	start := NewSExp("start", false, line.Origin.ToString())
 	end := NewSExp("end", false, line.End.ToString())
-	layer := NewSExp("layer", false, line.Layer.Name)
-	width := NewSExp("width", false, line.Width)
-	return NewSExp("fp_line", true, start, end, layer, width)
+	layer := NewSExp("layer", false, string(line.Layer))
+	width := NewSExp("width", false, fmt.Sprintf("%.4f", line.Width))
+	return NewSExp("fp_line", false, start, end, layer, width)
 }
 
 type LineSlice []Line

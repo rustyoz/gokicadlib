@@ -32,7 +32,7 @@ type Pad struct {
 	Shape            PadShapes
 	Size             Point
 	Drillsize        float64
-	Layers           KicadLayerSlice
+	Layers           LayerSlice
 	SolderMaskMargin float64
 	Padtype          PadTypes
 }
@@ -45,7 +45,7 @@ func (pad Pad) ToSExp() string {
 	layers := NewSExp("layers", false, pad.Layers.String()...)
 	soldermaskmargin := NewSExp("solder_mask_margin", false, fmt.Sprintf("%f", pad.SolderMaskMargin))
 
-	return NewSExp("pad "+fmt.Sprint(pad.Number)+" "+pad.Padtype.String()+" "+pad.Shape.String(), true, at, size, drill, layers, soldermaskmargin)
+	return NewSExp("pad "+fmt.Sprint(pad.Number)+" "+pad.Padtype.String()+" "+pad.Shape.String(), false, at, size, drill, layers, soldermaskmargin)
 }
 
 func (pad *Pad) String() string {

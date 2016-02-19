@@ -13,8 +13,9 @@ func NewSExp(name string, newline bool, contents ...string) string {
 	} else {
 		output = "(" + name + " "
 		for _, s := range contents {
-			output = output + s + ")"
+			output = output + " " + s
 		}
+		output = output + ")"
 	}
 
 	return output

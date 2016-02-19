@@ -20,14 +20,13 @@ func (arc Arc) ToSExp() string {
 	arc.CalculateEndPoint()
 	end := NewSExp("end", false, arc.End.ToString())
 	angle := NewSExp("angle", false, fmt.Sprintf("%f", arc.StartAngle))
-	layer := NewSExp("layer", false, arc.Layer.Name)
+	layer := NewSExp("layer", false, string(arc.Layer))
 	width := NewSExp("width", false, arc.Width)
 	return NewSExp("fp_line", true, start, end, angle, layer, width)
 }
 
 func (arc *Arc) CalculateEndPoint() {
-	origin := arc.Origin.ToPointFloat()
-	vector := PointFloat{arc.Radius * math.Cos(arc.StartAngle*180/math.Pi), arc.Radius * math.Sin(arc.StartAngle*180/math.Pi)}
-	end := PointFloat{origin.X + vector.X, origin.Y + vector.Y}
-	arc.End = Point{fmt.Sprintf("%f.4", end.X), fmt.Sprintf("%f.4", end.Y)}
+	vector := Point{arc.Radius * math.Cos(arc.StartAngle*180/math.Pi), arc.Radius * math.Sin(arc.StartAngle*180/math.Pi)}
+	arc.End = Point{arc.Origin.X + vector.X, arc.Origin.Y + vector.Y}
+
 }

@@ -7,5 +7,5 @@ type XYZ struct {
 }
 
 func (a XYZ) ToSexp() string {
-	return "xyz" + fmt.Sprint(a.x, a.y, a.z)
+	return "xyz " + fmt.Sprint(a.x, a.y, a.z)
 }
