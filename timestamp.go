@@ -10,7 +10,6 @@ type TimeStamp int64
 
 func (t TimeStamp) String() string {
 	s := fmt.Sprintf("%X", int64(t))
-	fmt.Println(s)
 	return s
 }
 
