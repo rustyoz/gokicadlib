@@ -16,6 +16,7 @@ type Module struct {
 	Path       string
 	Reference  Text
 	Value      Text
+	Arcs       []Arc
 	Lines      []Line
 	Pads       []Pad
 	Model      Model
@@ -32,7 +33,8 @@ func (m Module) ToSExp() string {
 	reference := m.Reference.ToSExp()
 	value := m.Value.ToSExp()
 	lines := LineSlice(m.Lines).ToSExp()
+	arcs := ArcSlice(m.Arcs).ToSExp()
 	pads := PadSlice(m.Pads).ToSExp()
 	text := TextSlice(m.Text).ToSExp()
-	return NewSExp(module, true, descr, attr, at, tags, reference, value, lines, pads, text)
+	return NewSExp(module, true, descr, attr, at, tags, reference, value, lines, arcs, pads, text)
 }

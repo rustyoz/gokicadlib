@@ -3,30 +3,40 @@ package gokicadlib
 import (
 	"fmt"
 	"math"
+	"strings"
 )
 
 type Arc struct {
-	Layer      Layer
-	Origin     Point
-	Radius     float64
-	StartAngle float64
-	SweepAngle float64
-	Width      string
-	End        Point
+	Layer Layer
+	Start Point
+	End   Point
+	Angle float64
+	Width float64
 }
+
+type ArcSlice []Arc
 
 func (arc Arc) ToSExp() string {
-	start := NewSExp("start", false, arc.Origin.ToString())
-	arc.CalculateEndPoint()
+	start := NewSExp("start", false, arc.Start.ToString())
 	end := NewSExp("end", false, arc.End.ToString())
-	angle := NewSExp("angle", false, fmt.Sprintf("%f", arc.StartAngle))
+	angle := NewSExp("angle", false, fmt.Sprintf("%d", int(arc.Angle)))
 	layer := NewSExp("layer", false, string(arc.Layer))
-	width := NewSExp("width", false, arc.Width)
-	return NewSExp("fp_line", true, start, end, angle, layer, width)
+	if arc.Width == 0 {
+		arc.Width = DEFAULTLINEWIDTH / 25.4
+	}
+	width := NewSExp("width", false, fmt.Sprint(arc.Width))
+	return NewSExp("fp_arc", false, start, end, angle, layer, width)
 }
 
-func (arc *Arc) CalculateEndPoint() {
-	vector := Point{arc.Radius * math.Cos(arc.StartAngle*180/math.Pi), arc.Radius * math.Sin(arc.StartAngle*180/math.Pi)}
-	arc.End = Point{arc.Origin.X + vector.X, arc.Origin.Y + vector.Y}
+func Vector(p Point, radius float64, angle float64) Point {
+	vector := Point{radius * math.Cos(angle*180/math.Pi), radius * math.Sin(angle*180/math.Pi)}
+	return vector
+}
 
+func (as ArcSlice) ToSExp() string {
+	var r []string
+	for _, a := range as {
+		r = append(r, a.ToSExp())
+	}
+	return strings.Join(r, "\n")
 }

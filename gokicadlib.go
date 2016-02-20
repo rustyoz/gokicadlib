@@ -5,6 +5,8 @@ import (
 	"strconv"
 )
 
+const DEFAULTLINEWIDTH float64 = 3
+
 type PCB struct {
 	modules []Module
 }

@@ -16,6 +16,9 @@ func (line Line) ToSExp() string {
 	start := NewSExp("start", false, line.Origin.ToString())
 	end := NewSExp("end", false, line.End.ToString())
 	layer := NewSExp("layer", false, string(line.Layer))
+	if line.Width == 0 {
+		line.Width = DEFAULTLINEWIDTH / 25.4
+	}
 	width := NewSExp("width", false, fmt.Sprintf("%.4f", line.Width))
 	return NewSExp("fp_line", false, start, end, layer, width)
 }
