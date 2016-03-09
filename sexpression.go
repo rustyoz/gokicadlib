@@ -24,3 +24,13 @@ func NewSExp(name string, newline bool, contents ...string) string {
 func JoinStrings(s ...string) string {
 	return strings.Join(s, " ")
 }
+
+type SExpressionSlice []SExpression
+
+func (ses SExpressionSlice) ToSExp() string {
+	var s string
+	for _, se := range ses {
+		s = s + se.ToSExp() + "\n"
+	}
+	return s
+}

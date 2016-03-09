@@ -11,6 +11,10 @@ type PCB struct {
 	modules []Module
 }
 
+type SExpression interface {
+	ToSExp() string
+}
+
 func roundOff(n float64) float64 {
 
 	s := fmt.Sprint(n)

@@ -6,21 +6,22 @@ import "fmt"
 type Module struct {
 	Name string
 
-	Layer      Layer
-	Tedit      TimeStamp
-	Tstamp     TimeStamp
-	Origin     Point
-	Descr      string
-	Attributes []string
-	Tags       []string
-	Path       string
-	Reference  Text
-	Value      Text
-	Arcs       []Arc
-	Lines      []Line
-	Pads       []Pad
-	Model      Model
-	Text       []Text
+	Layer        Layer
+	Tedit        TimeStamp
+	Tstamp       TimeStamp
+	Origin       Point
+	Descr        string
+	Attributes   []string
+	Tags         []string
+	Path         string
+	Reference    Text
+	Value        Text
+	Arcs         []Arc
+	Lines        []Line
+	Pads         []Pad
+	Model        Model
+	Text         []Text
+	SExpressions []SExpression
 }
 
 // ToSExp convert to kicad s-expression
@@ -36,5 +37,6 @@ func (m Module) ToSExp() string {
 	arcs := ArcSlice(m.Arcs).ToSExp()
 	pads := PadSlice(m.Pads).ToSExp()
 	text := TextSlice(m.Text).ToSExp()
-	return NewSExp(module, true, descr, attr, at, tags, reference, value, lines, arcs, pads, text)
+	ses := SExpressionSlice(m.SExpressions).ToSExp()
+	return NewSExp(module, true, descr, attr, at, tags, reference, value, lines, arcs, pads, text, ses)
 }

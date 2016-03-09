@@ -12,9 +12,12 @@ type Line struct {
 	Width  float64
 }
 
-func (line Line) ToSExp() string {
+func (line *Line) ToSExp() string {
 	start := NewSExp("start", false, line.Origin.ToString())
 	end := NewSExp("end", false, line.End.ToString())
+	if len(line.Layer) == 0 {
+		line.Layer = F_SilkS
+	}
 	layer := NewSExp("layer", false, string(line.Layer))
 	if line.Width == 0 {
 		line.Width = DEFAULTLINEWIDTH / 25.4
