@@ -29,9 +29,9 @@ func (t *Text) ToSExp() string {
 	origin := NewSExp("at", false, t.Origin.ToString())
 	if t.Type == "user" {
 		effects := NewSExp("effects", false, t.Font.ToSExp())
-		return NewSExp(fmt.Sprintf("fp_text %s \"%s\" %s%s", t.Type, t.Text, origin, layer), true, effects)
+		return NewSExp(fmt.Sprintf("fp_text %s %s %s%s", t.Type, t.Text, origin, layer), true, effects)
 	} else {
-		return fmt.Sprintf("(fp_text %s \"%s\" %s%s)", t.Type, t.Text, origin, layer)
+		return fmt.Sprintf("(fp_text %s %s %s %s)", t.Type, t.Text, origin, layer)
 	}
 }
 

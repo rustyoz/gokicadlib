@@ -56,6 +56,7 @@ const (
 	B_Adhes         = "B.Adhes"
 	B_CrtYd         = "B.CrtYd"
 	B_Fab           = "B.Fab"
+	Exclude         = "Exclude"
 )
 
 func (ls LayerSlice) String() []string {

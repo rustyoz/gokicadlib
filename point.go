@@ -18,3 +18,7 @@ func (p *Point) FromString(x string, y string) {
 func (p Point) ToString() string {
 	return fmt.Sprintf("%.4f %.4f", p.X, p.Y)
 }
+
+func (p Point) ToSExp() string {
+	return fmt.Sprintf("(xy %.4f %.4f)", p.X, p.Y)
+}

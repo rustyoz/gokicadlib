@@ -4,15 +4,16 @@ import "fmt"
 
 type Polygon struct {
 	Layer  Layer
-	Origin Point
-	End    Point
 	Points []Point
 	Width  float64
 }
 
 func (p *Polygon) ToSExp() string {
-	start := NewSExp("start", false, p.Origin.ToString())
-	end := NewSExp("end", false, p.End.ToString())
+	var points string
+	for _, s := range p.Points {
+		points = points + s.ToSExp()
+	}
+	pts := NewSExp("pts", true, points)
 	if len(p.Layer) == 0 {
 		p.Layer = F_SilkS
 	}
@@ -21,5 +22,5 @@ func (p *Polygon) ToSExp() string {
 		p.Width = DEFAULTLINEWIDTH / 25.4
 	}
 	width := NewSExp("width", false, fmt.Sprintf("%.4f", p.Width))
-	return NewSExp("polygon", false, start, end, layer, width)
+	return NewSExp("fp_poly", false, pts, layer, width)
 }
