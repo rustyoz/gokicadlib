@@ -1,59 +1,73 @@
 package gokicadlib
 
-import (
-	"bytes"
-	"fmt"
-)
+import "fmt"
 
 // PinTypes ...
-type PinTypes int
+type PinTypes string
 
 const (
-	Input PinTypes = iota
-	Output
+	Input         PinTypes = "I"
+	Output                 = "O"
+	Bidirectional          = "B"
+	Tristate               = "T"
+	Passive                = "P"
+	OpenCollector          = "O"
+	OpenEmitter            = "E"
+	NonConnected           = "N"
+	Unspecificied          = "U"
+	PowerInput             = "W"
+	PowerOutput            = "w"
 )
 
 // PinShapes ...
-type PinShapes int
+type PinShapes string
 
 const (
-	Normal PinShapes = iota
-	Inverted
-	Clock
-	Lowinput
-	Outputlow
-	Invisible
+	Normal    PinShapes = ""
+	Inverted            = "I"
+	Clock               = "C"
+	Lowinput            = "L"
+	Outputlow           = "V"
+	Invisible           = "N"
 )
 
 type PinSlice []Pin
 
+type PinOrientation string
+
+const (
+	Up    PinOrientation = "U"
+	Down                 = "D"
+	Left                 = "L"
+	Right                = "R"
+)
+
 // Pin ...
 type Pin struct {
-	Number   int
-	PinName  string
-	Origin   Point
-	Shape    PinShapes
-	Length   float64
-	Pintype  PinTypes
-	DeMorgan int
-	Sizenum  float64
-	Sizename float64
-	Part     int
+	Number      int
+	PinName     string
+	Origin      Point
+	Shape       PinShapes
+	Length      float64
+	Type        PinTypes
+	DeMorgan    int
+	Sizenum     float64
+	Sizename    float64
+	Part        int
+	Orientation PinOrientation
 }
 
-func (p *Pin) KicadLib() *bytes.Buffer {
-	output := &bytes.Buffer{}
+func (p *Pin) KicadLib() string {
 	var l string
 	// symbol definition
-	var orientation string
-	var shape string
-	var pintype string
-	l = fmt.Sprint("X %s %d %f %f %f %s %d %d %d %d %s %s",
+	if len(p.Type) == 0 {
+		p.Type = Unspecificied
+	}
+	l = fmt.Sprintf("X %s %d %.0f %.0f %.0f %s %.0f %.0f %d %d %s %s \r\n",
 		p.PinName,
 		p.Number,
-		p.Origin.X, p.Origin.Y, p.Length, orientation, p.Sizenum, p.Sizename, p.Part, p.DeMorgan, pintype, shape)
 
-	output.WriteString(l + "\r\n")
+		p.Origin.X, p.Origin.Y, p.Length, p.Orientation, p.Sizenum, p.Sizename, p.Part, p.DeMorgan, p.Type, p.Shape)
 
-	return output
+	return l
 }

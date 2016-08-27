@@ -36,3 +36,7 @@ func (ls LineSlice) ToSExp() string {
 	return strings.Join(r, "\n")
 
 }
+
+func (l Line) SchemLib() string {
+	return fmt.Sprintf("P 2 0 0 %.0f %s %s N\r\n", l.Width, l.Origin.Rounded(), l.End.Rounded())
+}

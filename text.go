@@ -1,6 +1,7 @@
 package gokicadlib
 
 import (
+	"bytes"
 	"fmt"
 	"strings"
 )
@@ -14,8 +15,23 @@ type Text struct {
 	Visible       bool
 	Justification string
 	Style         string
-	width         float64
+	Width         float64
 	Font          Font
+	Orientation   TextOrientation
+}
+
+type TextOrientation int
+
+const (
+	Horizontal TextOrientation = 0
+	Vertical                   = 1
+)
+
+func (to TextOrientation) String() string {
+	if to == Horizontal {
+		return "0"
+	}
+	return "1"
 }
 
 type TextSlice []Text
@@ -41,5 +57,21 @@ func (ts TextSlice) ToSExp() string {
 		r = append(r, t.ToSExp())
 	}
 	return strings.Join(r, "\n")
+
+}
+
+func (t Text) SchemLib() string {
+	var out string
+	out = "T " + t.Orientation.String() + " " + t.Origin.ToString() + "0 0 0" + t.Text + "\r\n"
+
+	return out
+}
+
+func (ts TextSlice) Schemlib() string {
+	var o bytes.Buffer
+	for _, t := range ts {
+		o.WriteString(t.SchemLib())
+	}
+	return o.String()
 
 }

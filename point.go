@@ -22,3 +22,7 @@ func (p Point) ToString() string {
 func (p Point) ToSExp() string {
 	return fmt.Sprintf("(xy %.4f %.4f)", p.X, p.Y)
 }
+
+func (p Point) Rounded() string {
+	return fmt.Sprintf("%.0f %.0f", p.X, p.Y)
+}

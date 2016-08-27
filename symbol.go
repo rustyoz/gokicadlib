@@ -13,6 +13,7 @@ type Symbol struct {
 	Tedit      TimeStamp
 	Tstamp     TimeStamp
 	Origin     Point
+	Offset     int
 	Descr      string
 	Attributes []string
 	Tags       []string
@@ -27,18 +28,29 @@ type Symbol struct {
 	Text       []Text
 }
 
-func (s *Symbol) KicadLib() *bytes.Buffer {
+func (s *Symbol) KicadLib() string {
 	output := &bytes.Buffer{}
 	var l string
+
+	if s.Reference.Width == 0 {
+		s.Reference.Width = 50
+	}
+
+	if s.Value.Width == 0 {
+		s.Value.Width = 50
+	}
+	if s.Offset == 0 {
+		s.Offset = 50
+	}
 	// symbol definition
-	l = "DEF " + s.Name + " " + s.Reference.Text + " " + s.Origin.ToString() + " Y Y 1 L N" + "\r\n"
+	l = fmt.Sprintf("DEF %s %s 0 %d Y Y 1 L N\r\n", s.Name, s.Reference.Text, s.Offset)
 	output.WriteString(l)
 
 	// symbolic prefix text
-	l = "F0 \"" + s.Reference.Text + "\" " + s.Reference.Origin.ToString() + " " + fmt.Sprint(s.Reference.width) + " H V C N" + "\r\n"
+	l = fmt.Sprintf("F0 \"%s\" %s %.0f H V C CNN\r\n", s.Reference.Text, s.Reference.Origin.Rounded(), s.Reference.Width)
 	output.WriteString(l)
 	// symbolic prefix text
-	l = "F1 \"" + s.Value.Text + "\" " + s.Value.Origin.ToString() + " " + fmt.Sprint(s.Value.width) + " H V C N" + "\r\n"
+	l = "F1 \"" + s.Value.Text + "\" " + s.Value.Origin.Rounded() + " " + fmt.Sprint(s.Value.Width) + " H V C CNN" + "\r\n"
 	output.WriteString(l)
 
 	l = "ALIAS " + fmt.Sprint(s.Alias) + "\r\n"
@@ -48,11 +60,14 @@ func (s *Symbol) KicadLib() *bytes.Buffer {
 	output.WriteString(l)
 
 	for _, p := range s.Pins {
-		p.KicadLib().WriteTo(output)
+		output.WriteString(p.KicadLib())
+	}
+	for _, l := range s.Lines {
+		output.WriteString(l.SchemLib())
 	}
 
 	l = "ENDDRAW\r\nENDDEF\r\n"
 	output.WriteString(l)
 
-	return output
+	return output.String()
 }

@@ -16,7 +16,7 @@ func (sl *SchematicLibrary) KicadLib() *bytes.Buffer {
 	output.WriteString("EESchema-LIBRARY Version 2.3\r\n#encoding utf-8\r\n")
 
 	for _, s := range sl.Symbols {
-		output.Write(s.KicadLib().Bytes())
+		output.WriteString(s.KicadLib())
 	}
 
 	output.WriteString("#\r\n#End Library\r\n")
