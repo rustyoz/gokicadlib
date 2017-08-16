@@ -77,3 +77,7 @@ func roundOff(n float64) float64 {
 	}
 	return n
 }
+
+func Quote(s string) string {
+	return fmt.Sprintf("\"%s\"", s)
+}

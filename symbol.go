@@ -3,35 +3,39 @@ package gokicadlib
 import (
 	"bytes"
 	"fmt"
+	"strings"
 )
 
 // Symbol Kicad Symbol
 type Symbol struct {
 	Name string
 
-	Layer      Layer
-	Tedit      TimeStamp
-	Tstamp     TimeStamp
-	Origin     Point
-	Offset     int
-	Descr      string
-	Attributes []string
-	Tags       []string
-	Path       string
-	Reference  Text
-	Value      Text
-	Arcs       []Arc
-	Lines      []Line
-	Pins       []Pin
-	Alias      []string
-	FootPrints []string
-	Text       []Text
+	Layer         Layer
+	Tedit         TimeStamp
+	Tstamp        TimeStamp
+	Origin        Point
+	Offset        int
+	Description   string
+	Documentation string
+	KeyWords      []string
+	Attributes    []string
+	Tags          []string
+	Path          string
+	Reference     Text
+	Value         Text
+	Arcs          []Arc
+	Lines         []Line
+	Pins          []Pin
+	Alias         []string
+	FootPrints    []string
+	Text          []Text
 }
 
 func (s *Symbol) KicadLib() string {
 	output := &bytes.Buffer{}
 	var l string
 
+	s.Name = strings.Replace(s.Name, " ", "", -1)
 	if s.Reference.Width == 0 {
 		s.Reference.Width = 50
 	}
@@ -53,9 +57,22 @@ func (s *Symbol) KicadLib() string {
 	l = "F1 \"" + s.Value.Text + "\" " + s.Value.Origin.Rounded() + " " + fmt.Sprint(s.Value.Width) + " H V C CNN" + "\r\n"
 	output.WriteString(l)
 
-	l = "ALIAS " + fmt.Sprint(s.Alias) + "\r\n"
+	if len(s.Alias) > 0 {
+		l = "ALIAS"
+		for _, a := range s.Alias {
+			l = l + " " + a
+		}
+		l += "\n"
+	}
 	output.WriteString(l)
 
+	if len(s.FootPrints) > 0 {
+		output.WriteString("$FPLIST\r\n")
+		for _, fp := range s.FootPrints {
+			output.WriteString(" " + fp + "\r\n")
+		}
+		output.WriteString("$ENDFPLIST\r\n")
+	}
 	l = "DRAW\r\n"
 	output.WriteString(l)
 

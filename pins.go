@@ -1,6 +1,9 @@
 package gokicadlib
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 // PinTypes ...
 type PinTypes string
@@ -63,11 +66,15 @@ func (p *Pin) KicadLib() string {
 	if len(p.Type) == 0 {
 		p.Type = Unspecificied
 	}
-	l = fmt.Sprintf("X %s %d %.0f %.0f %.0f %s %.0f %.0f %d %d %s %s \r\n",
+	p.PinName = strings.Replace(p.PinName, " ", "", -1)
+	if len(p.PinName) == 0 {
+		p.PinName = "~"
+	}
+	l = fmt.Sprintf("X %s %d %.0f %.0f %.0f %s %.0f %.0f %d %d %s\n",
 		p.PinName,
 		p.Number,
 
-		p.Origin.X, p.Origin.Y, p.Length, p.Orientation, p.Sizenum, p.Sizename, p.Part, p.DeMorgan, p.Type, p.Shape)
+		p.Origin.X, p.Origin.Y, p.Length, p.Orientation, p.Sizenum, p.Sizename, p.Part, p.DeMorgan, p.Type)
 
 	return l
 }

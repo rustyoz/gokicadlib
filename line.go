@@ -38,5 +38,7 @@ func (ls LineSlice) ToSExp() string {
 }
 
 func (l Line) SchemLib() string {
+	l.Origin.Y = -l.Origin.Y
+	l.End.Y = -l.End.Y
 	return fmt.Sprintf("P 2 0 0 %.0f %s %s N\r\n", l.Width, l.Origin.Rounded(), l.End.Rounded())
 }

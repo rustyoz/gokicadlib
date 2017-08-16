@@ -29,7 +29,7 @@ func (arc Arc) ToSExp() string {
 }
 
 func Vector(p Point, radius float64, angle float64) Point {
-	vector := Point{radius * math.Cos(angle*180/math.Pi), radius * math.Sin(angle*180/math.Pi)}
+	vector := Point{radius * math.Cos(angle*180/math.Pi), radius * math.Sin(angle*180/math.Pi), 0}
 	return vector
 }
 

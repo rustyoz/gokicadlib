@@ -6,8 +6,10 @@ type SchematicLibrary struct {
 	Symbols []Symbol
 }
 
-func (sl *SchematicLibrary) AddSymbol(s Symbol) {
-	sl.Symbols = append(sl.Symbols, s)
+func (sl *SchematicLibrary) AddSymbol(ss ...Symbol) {
+	for _, s := range ss {
+		sl.Symbols = append(sl.Symbols, s)
+	}
 }
 
 func (sl *SchematicLibrary) KicadLib() *bytes.Buffer {
